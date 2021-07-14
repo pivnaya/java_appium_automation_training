@@ -16,4 +16,13 @@ public class MainClassTest extends MainClass
         int number = getClassNumber();
         Assert.assertTrue("Число не больше заданного!", number > 45);
     }
+
+    @Test
+    public void testGetClassString()
+    {
+        String string = getClassString();
+        if (!(string.contains("Hello")  | string.contains("hello"))) {
+            Assert.fail("Строка не содержит заданную!");
+        }
+    }
 }
