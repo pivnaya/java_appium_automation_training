@@ -17,29 +17,26 @@ public class FirstTest {
     private AppiumDriver driver;
 
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("platformName","Android");
-        capabilities.setCapability("deviceName","AndroidTestDevice");
-        capabilities.setCapability("platformVersion","8.0");
-        capabilities.setCapability("automationName","Appium");
-        capabilities.setCapability("appPackage","org.wikipedia");
-        capabilities.setCapability("appActivity",".main.MainActivity");
-        capabilities.setCapability("app","D:/projects/java-appium-automation/apks/org.wikipedia.apk");
+        capabilities.setCapability("platformName", "Android");
+        capabilities.setCapability("deviceName", "AndroidTestDevice");
+        capabilities.setCapability("platformVersion", "8.0");
+        capabilities.setCapability("automationName", "Appium");
+        capabilities.setCapability("appPackage", "org.wikipedia");
+        capabilities.setCapability("appActivity", ".main.MainActivity");
+        capabilities.setCapability("app", "D:/projects/java-appium-automation/apks/org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
 
     @After
-    public void tearDown()
-    {
+    public void tearDown() {
         driver.quit();
     }
 
     @Test
-    public void testSearch()
-    {
+    public void testSearch() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
@@ -59,8 +56,7 @@ public class FirstTest {
     }
 
     @Test
-    public void testCancelSearch()
-    {
+    public void testCancelSearch() {
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
                 "Cannot find 'Search Wikipedia' input",
@@ -92,8 +88,7 @@ public class FirstTest {
     }
 
     @Test
-    public void testCompareArticleTitle()
-    {
+    public void testCompareArticleTitle() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
@@ -124,12 +119,11 @@ public class FirstTest {
         Assert.assertEquals(
                 "We see unexpected title",
                 "Java (programming language)",
-                article_title);
-
+                article_title
+        );
     }
-
-    private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds)
-    {
+    
+    private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
         return wait.until(
@@ -137,22 +131,19 @@ public class FirstTest {
         );
     }
 
-    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds)
-    {
+    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.click();
         return element;
     }
 
-    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutInSeconds)
-    {
+    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.sendKeys(value);
         return element;
     }
 
-    private boolean waitElementNotPresent(By by, String error_message, long timeoutInSeconds)
-    {
+    private boolean waitElementNotPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
         return wait.until(
@@ -160,8 +151,7 @@ public class FirstTest {
         );
     }
 
-    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds)
-    {
+    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.clear();
         return element;
