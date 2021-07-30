@@ -123,6 +123,15 @@ public class FirstTest {
         );
     }
     
+    @Test
+    public void testCompareSearchInputText() {
+        assertElementHasText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_container']//*[@class='android.widget.TextView']"),
+                "Search Wikipedia",
+                "We see unexpected text in input"
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -155,5 +164,12 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.clear();
         return element;
+    }
+
+    private void assertElementHasText(By by, String expected_value, String error_message) {
+        WebElement element = waitForElementPresent(by, "Cannot find element", 15);
+        String element_text = element.getAttribute("text");
+
+        Assert.assertEquals(error_message, expected_value, element_text);
     }
 }
