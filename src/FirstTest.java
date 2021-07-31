@@ -40,13 +40,15 @@ public class FirstTest {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
-                5);
+                5
+        );
 
         waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 "Java",
                 "Cannot find search input",
-                5);
+                5
+        );
 
         waitForElementPresent(
                 By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text= 'Object-oriented programming language']"),
@@ -67,12 +69,14 @@ public class FirstTest {
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 "Java",
                 "Cannot find search input",
-                5);
+                5
+        );
 
         waitForElementAndClear(
                 By.id("org.wikipedia:id/search_src_text"),
                 "Cannot find search input",
-                5);
+                5
+        );
 
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_close_btn"),
@@ -144,7 +148,8 @@ public class FirstTest {
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 "Java",
                 "Cannot find search input",
-                5);
+                5
+        );
 
         List<WebElement> titles = waitElementsPresent(
                 By.id("org.wikipedia:id/page_list_item_title"),
@@ -181,7 +186,8 @@ public class FirstTest {
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 search_value,
                 "Cannot find search input",
-                5);
+                5
+        );
 
         List<WebElement> items = waitElementsPresent(
                 By.id("org.wikipedia:id/page_list_item_container"),
@@ -198,7 +204,8 @@ public class FirstTest {
         Assert.assertEquals(
                 "Not all items contains search value",
                 items.size(),
-                items_with_search_value.size());
+                items_with_search_value.size()
+        );
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
