@@ -167,6 +167,40 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testCompareSearchResult() {
+        String search_value = "Java";
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search_value,
+                "Cannot find search input",
+                5);
+
+        List<WebElement> items = waitElementsPresent(
+                By.id("org.wikipedia:id/page_list_item_container"),
+                "Cannot find search items",
+                5
+        );
+
+        List<WebElement> items_with_search_value = waitElementsPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[contains(@text, '" + search_value + "')]"),
+                "Cannot find search items with expected value",
+                5
+        );
+
+        Assert.assertEquals(
+                "Not all items contains search value",
+                items.size(),
+                items_with_search_value.size());
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
