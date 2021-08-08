@@ -356,10 +356,10 @@ public class FirstTest {
         String article_title_for_delete = "JavaScript";
         String name_of_folder = "Learning programming";
 
-        searchPhraseAndOpenArticle(search_line, article_title_for_save);
+        searchPhraseAndOpenArticleWithWait(search_line, article_title_for_save);
         saveArticleToTheNewList(name_of_folder);
         closeArticle();
-        searchPhraseAndOpenArticle(search_line, article_title_for_delete);
+        searchPhraseAndOpenArticleWithWait(search_line, article_title_for_delete);
         saveArticleToTheList(name_of_folder);
         closeArticle();
 
@@ -591,6 +591,15 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testAssertTitle() {
+        searchPhraseAndOpenArticleWithoutWait("Java", "JavaScript");
+        assertElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find article title"
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -717,12 +726,20 @@ public class FirstTest {
         }
     }
 
+    private void assertElementPresent(By by, String error_message) {
+        int amount_of_elements = getAmountOfElements(by);
+        if (amount_of_elements == 0) {
+            String default_message = "An element '" + by.toString() + "' supposed to be present.";
+            throw new AssertionError(default_message + " " + error_message);
+        }
+    }
+
     private String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         return  element.getAttribute(attribute);
     }
 
-    private void searchPhraseAndOpenArticle(String search_line, String title_for_open) {
+    private void searchPhraseAndOpenArticleWithWait(String search_line, String title_for_open) {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Cannot find 'Search Wikipedia' input",
@@ -746,6 +763,27 @@ public class FirstTest {
                 By.id("org.wikipedia:id/view_page_title_text"),
                 "Cannot find article title",
                 15
+        );
+    }
+
+    private void searchPhraseAndOpenArticleWithoutWait(String search_line, String title_for_open) {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search_line,
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text= '" + title_for_open + "']"),
+                "Cannot find '" + title_for_open + "' topic searching by " + search_line,
+                5
         );
     }
 
