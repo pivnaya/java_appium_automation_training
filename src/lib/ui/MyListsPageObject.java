@@ -6,7 +6,8 @@ import org.openqa.selenium.By;
 public class MyListsPageObject extends MainPageObject{
     private static final String
             FOLDER_BY_NAME_TPL = "//*[@text= '{FOLDER_NAME}']",
-            ARTICLE_BY_TITLE_TPL = "//*[@text='{TITLE}']";
+            ARTICLE_BY_TITLE_TPL = "//*[@text='{TITLE}']",
+            ARTICLE_ELEMENT = "//*[@resource-id='org.wikipedia:id/reading_list_contents']//*[@resource-id='org.wikipedia:id/page_list_item_container']";
 
     public MyListsPageObject(AppiumDriver driver) {
         super(driver);
@@ -48,5 +49,14 @@ public class MyListsPageObject extends MainPageObject{
         String article_xpath = getSavedArticleXpathByTitle(article_title);
         this.swipeElementToLeft(By.xpath(article_xpath), "Cannot find saved article");
         this.waitForArticleToDisappearByTitle(article_title);
+    }
+
+    public int getAmountOfArticlesInList() {
+        this.waitForElementsPresent(By.xpath(ARTICLE_ELEMENT), "Cannot find any articles in list", 15);
+        return getAmountOfElements(By.xpath(ARTICLE_ELEMENT));
+    }
+
+    public void openArticleFromList() {
+        this.waitForElementAndClick(By.xpath(ARTICLE_ELEMENT), "Cannot find and click article", 5);
     }
 }
