@@ -12,7 +12,7 @@ public class SearchTests extends CoreTestCase {
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.waitForSearchResult("Object-oriented programming language");
+        SearchPageObject.waitForSearchResultBySubstring("Object-oriented programming language");
     }
 
     @Test
@@ -60,6 +60,18 @@ public class SearchTests extends CoreTestCase {
         int amount_of_search_results_with_value = SearchPageObject.getAmountOfFoundArticlesWithSubstringContains(search_line);
 
         assertEquals("Not all items contains search value", amount_of_search_results, amount_of_search_results_with_value);
+    }
+
+    @Test
+    public void testCompareArticlesInSearchResult() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+
+        SearchPageObject.waitForSearchResultByTitleAndDescription("Java", "Island of Indonesia");
+        SearchPageObject.waitForSearchResultByTitleAndDescription("JavaScript", "Programming language");
+        SearchPageObject.waitForSearchResultByTitleAndDescription("Java (programming language)", "Object-oriented programming language");
     }
 
     @Test
