@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
@@ -70,9 +71,15 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
 
-        SearchPageObject.waitForSearchResultByTitleAndDescription("Java", "Island of Indonesia");
-        SearchPageObject.waitForSearchResultByTitleAndDescription("JavaScript", "Programming language");
-        SearchPageObject.waitForSearchResultByTitleAndDescription("Java (programming language)", "Object-oriented programming language");
+        if (Platform.getInstance().isAndroid()) {
+            SearchPageObject.waitForSearchResultByTitleAndDescription("Java", "Island of Indonesia");
+            SearchPageObject.waitForSearchResultByTitleAndDescription("JavaScript", "Programming language");
+            SearchPageObject.waitForSearchResultByTitleAndDescription("Java (programming language)", "Object-oriented programming language");
+        } else {
+            SearchPageObject.waitForSearchResultByTitleAndDescription("Java", "Indonesian island");
+            SearchPageObject.waitForSearchResultByTitleAndDescription("JavaScript", "High-level programming language");
+            SearchPageObject.waitForSearchResultByTitleAndDescription("Java (programming language)", "Object-oriented programming language");
+        }
     }
 
     @Test
