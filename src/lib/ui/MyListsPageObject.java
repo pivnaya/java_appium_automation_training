@@ -8,7 +8,8 @@ abstract public class MyListsPageObject extends MainPageObject{
             FOLDER_BY_NAME_TPL,
             ARTICLE_BY_TITLE_TPL,
             ARTICLE_ELEMENT,
-            CLOSE_INFORM_POPUP;
+            CLOSE_INFORM_POPUP,
+            ARTICLE_BY_TITLE_AND_DESCRIPTION_TPL;
 
     public MyListsPageObject(AppiumDriver driver) {
         super(driver);
@@ -21,6 +22,10 @@ abstract public class MyListsPageObject extends MainPageObject{
 
     private static String getSavedArticleXpathByTitle(String article_title) {
         return ARTICLE_BY_TITLE_TPL.replace("{TITLE}", article_title);
+    }
+
+    private static String getSavedArticleByTitleAndDescription(String title, String description) {
+        return ARTICLE_BY_TITLE_AND_DESCRIPTION_TPL.replace("{TITLE}", title).replace("{DESCRIPTION}", description);
     }
     /* TEMPLATES METHODS */
 
@@ -58,7 +63,7 @@ abstract public class MyListsPageObject extends MainPageObject{
     }
 
     public int getAmountOfArticlesInList() {
-        this.waitForElementsPresent(ARTICLE_ELEMENT, "Cannot find any articles in list", 15);
+        this.waitForElementPresent(ARTICLE_ELEMENT, "Cannot find any articles in list", 15);
         return getAmountOfElements(ARTICLE_ELEMENT);
     }
 
@@ -68,5 +73,10 @@ abstract public class MyListsPageObject extends MainPageObject{
 
     public void closeInformationPopup() {
         this.waitForElementAndClick(CLOSE_INFORM_POPUP, "Cannot find and click close button", 5);
+    }
+
+    public void assertArticlePresentInList(String article_title, String article_description) {
+        String article_xpath = getSavedArticleByTitleAndDescription(article_title, article_description);
+        this.assertElementPresent(article_xpath, "Cannot find article with title " + article_title + " and description " + article_description);
     }
 }

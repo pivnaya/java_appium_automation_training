@@ -49,9 +49,9 @@ public class MyListsTests extends CoreTestCase {
     @Test
     public void testSaveTwoArticlesToMyList() {
         String search_line = "Java";
-        String article_title_for_save = "Java (programming language)";
-        String article_title_for_delete = "JavaScript";
-        String name_of_folder = "Learning programming";
+        String article_title_for_save = "JavaScript";
+        String article_description_for_save = "High-level programming language";
+        String article_title_for_delete = "Java (programming language)";
 
         //Adding first article to list
 
@@ -64,7 +64,13 @@ public class MyListsTests extends CoreTestCase {
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
 
         ArticlePageObject.waitForTitleElement();
-        ArticlePageObject.addArticleToNewList(name_of_folder);
+
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToNewList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticleToMySaved();
+        }
+
         ArticlePageObject.closeArticle();
 
         //Adding second article to list
@@ -74,7 +80,13 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject.clickByArticleWithSubstring(article_title_for_delete);
 
         ArticlePageObject.waitForTitleElement();
-        ArticlePageObject.addArticleToList(name_of_folder);
+
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticleToMySaved();
+        }
+
         ArticlePageObject.closeArticle();
 
         //Deleting article from list
@@ -83,17 +95,24 @@ public class MyListsTests extends CoreTestCase {
         NavigationUI.clickMyLists();
 
         MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
-        MyListsPageObject.openFolderByName(name_of_folder);
+
+        if (Platform.getInstance().isAndroid()) {
+            MyListsPageObject.openFolderByName(name_of_folder);
+        } else {
+            MyListsPageObject.closeInformationPopup();
+        }
+
         MyListsPageObject.swipeByArticleToDelete(article_title_for_delete);
 
         int amount_of_articles = MyListsPageObject.getAmountOfArticlesInList();
-
         assertEquals("We see unexpected count of article after deleting", 1, amount_of_articles);
 
-        MyListsPageObject.openArticleFromList();
-
-        String article_title = ArticlePageObject.getArticleTitle();
-
-        assertEquals("We see unexpected title", article_title_for_save, article_title);
+        if (Platform.getInstance().isAndroid()) {
+            MyListsPageObject.openArticleFromList();
+            String article_title = ArticlePageObject.getArticleTitle();
+            assertEquals("We see unexpected title", article_title_for_save, article_title);
+        } else {
+            MyListsPageObject.assertArticlePresentInList(article_title_for_save, article_description_for_save);
+        }
     }
 }
