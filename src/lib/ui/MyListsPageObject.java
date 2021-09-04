@@ -1,12 +1,14 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 
-public class MyListsPageObject extends MainPageObject{
-    private static final String
-            FOLDER_BY_NAME_TPL = "xpath://*[@text= '{FOLDER_NAME}']",
-            ARTICLE_BY_TITLE_TPL = "xpath://*[@text='{TITLE}']",
-            ARTICLE_ELEMENT = "xpath://*[@resource-id='org.wikipedia:id/reading_list_contents']//*[@resource-id='org.wikipedia:id/page_list_item_container']";
+abstract public class MyListsPageObject extends MainPageObject{
+    protected static String
+            FOLDER_BY_NAME_TPL,
+            ARTICLE_BY_TITLE_TPL,
+            ARTICLE_ELEMENT,
+            CLOSE_INFORM_POPUP;
 
     public MyListsPageObject(AppiumDriver driver) {
         super(driver);
@@ -47,6 +49,11 @@ public class MyListsPageObject extends MainPageObject{
         this.waitForArticleToAppearByTitle(article_title);
         String article_xpath = getSavedArticleXpathByTitle(article_title);
         this.swipeElementToLeft(article_xpath, "Cannot find saved article");
+
+        if (Platform.getInstance().isIOS()) {
+            this.clickElementToTheRightUpperCorner(article_xpath, "Cannot find saved article");
+        }
+
         this.waitForArticleToDisappearByTitle(article_title);
     }
 
@@ -57,5 +64,9 @@ public class MyListsPageObject extends MainPageObject{
 
     public void openArticleFromList() {
         this.waitForElementAndClick(ARTICLE_ELEMENT, "Cannot find and click article", 5);
+    }
+
+    public void closeInformationPopup() {
+        this.waitForElementAndClick(CLOSE_INFORM_POPUP, "Cannot find and click close button", 5);
     }
 }

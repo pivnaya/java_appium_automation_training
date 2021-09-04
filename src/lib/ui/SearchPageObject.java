@@ -2,20 +2,18 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 
-public class SearchPageObject extends MainPageObject {
+abstract public class SearchPageObject extends MainPageObject {
 
-    private static final String
-            SEARCH_INIT_ELEMENT = "xpath://*[contains(@text, 'Search Wikipedia')]",
-            SEARCH_INIT_ELEMENT_TEXT = "xpath://*[@resource-id='org.wikipedia:id/search_container']//*[@class='android.widget.TextView']",
-            SEARCH_INPUT = "xpath://*[contains(@text, 'Search…')]",
-            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-            SEARCH_RESULT_BY_SUBSTRING_EQUALS_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text= '{SUBSTRING}']",
-            SEARCH_RESULT_BY_SUBSTRING_CONTAINS_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[contains(@text, '{SUBSTRING}')]",
-            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container' " +
-                    "and .//*[@resource-id='org.wikipedia:id/page_list_item_title' and @text = '{TITLE}'] " +
-                    "and .//*[@resource-id='org.wikipedia:id/page_list_item_description' and @text = '{DESCRIPTION}']]",
-            SEARCH_RESULT_ELEMENT = "xpath://*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            EMPTY_RESULT_LABEL = "xpath://*[@text='No results found']";
+    protected static String
+            SEARCH_INIT_ELEMENT,
+            SEARCH_INIT_ELEMENT_TEXT,
+            SEARCH_INPUT,
+            SEARCH_CANCEL_BUTTON,
+            SEARCH_RESULT_BY_SUBSTRING_EQUALS_TPL,
+            SEARCH_RESULT_BY_SUBSTRING_CONTAINS_TPL,
+            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL,
+            SEARCH_RESULT_ELEMENT,
+            EMPTY_RESULT_LABEL;
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -76,18 +74,18 @@ public class SearchPageObject extends MainPageObject {
     }
 
     public int getAmountOfFoundArticles() {
-        this.waitForElementsPresent(SEARCH_RESULT_ELEMENT, "Cannot find anything by the request", 15);
+        this.waitForElementPresent(SEARCH_RESULT_ELEMENT, "Cannot find anything by the request", 15);
         return getAmountOfElements(SEARCH_RESULT_ELEMENT);
     }
 
     public int getAmountOfFoundArticlesWithSubstringContains(String substring) {
-        this.waitForElementsPresent(SEARCH_RESULT_ELEMENT, "Cannot find anything by the request", 15);
+        this.waitForElementPresent(SEARCH_RESULT_ELEMENT, "Cannot find anything by the request", 15);
         String search_result_xpath = getResultSearchElementWithSubstringContains(substring);
         return getAmountOfElements(search_result_xpath);
     }
 
     public void waitForEmptyResultsLabel() {
-        this.waitForElementsPresent(EMPTY_RESULT_LABEL, "Cannot find empty result label by the request",15);
+        this.waitForElementPresent(EMPTY_RESULT_LABEL, "Cannot find empty result label by the request",15);
     }
 
     public void assertThereIsNoResultOfSearch() {
